@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <meta name="description" content="A little Italian, one word at a time. Flashcards and 20-question quizzes from the 500 most frequent Italian words, with custom ranges, random practice, and present-tense verb conjugations.">
+  <title>Parola — A little Italian, every day.</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="./" aria-label="Parola home"><span class="brand-mark">p<span>·</span></span>parola<span class="brand-dot">.</span></a>
+    <nav aria-label="Main navigation"><span class="nav-active">Practice</span><button id="about-open" class="text-button">The word list <span aria-hidden="true">↗</span></button></nav>
+    <span class="stateless-badge"><span></span>Your review list, remembered.</span>
+  </header>
+  <main>
+    <section class="intro">
+      <div class="eyebrow"><span class="italian-flag" aria-hidden="true"></span> PICCOLE PAROLE, GRANDI PASSI</div>
+      <h1>A little Italian.<br><em>A world of possibility.</em></h1>
+      <p>Start with the words that come up the most.<br>Pick your pool, turn a card, find your next parola.</p>
+    </section>
+    <div class="workspace">
+      <aside class="settings" aria-label="Practice settings">
+        <div class="section-heading"><span class="step">01</span><h2>Make it your own</h2></div>
+        <form id="settings-form">
+          <label class="field-label">WORD POOL</label>
+          <div class="presets" role="group" aria-label="Word pool">
+            <button type="button" data-top="100" class="selected" aria-pressed="true">Top 100<span>The essentials</span><span class="radio"></span></button>
+            <button type="button" data-top="250" aria-pressed="false">Top 250<span>A little further</span><span class="radio"></span></button>
+            <button type="button" data-top="500" aria-pressed="false">All 500<span>The full collection</span><span class="radio"></span></button>
+            <button type="button" data-top="custom" aria-pressed="false">Custom range<span>Find your own level</span><span class="radio"></span></button>
+          </div>
+          <div id="custom-fields" hidden>
+            <div class="range-inputs"><label>From rank<input id="range-start" type="number" min="1" max="500" value="1" required></label><span>—</span><label>To rank<input id="range-end" type="number" min="1" max="500" value="100" required></label></div>
+            <p class="field-hint">Use 1 to N to practice any top-N pool.</p>
+          </div>
+          <label class="field-label direction-label" for="direction">CARD DIRECTION</label>
+          <select id="direction"><option value="it-en">Italian → English</option><option value="en-it">English → Italian</option></select>
+          <p id="settings-error" class="error" role="alert" hidden></p>
+          <button type="submit" class="shuffle-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h3c5 0 7 12 12 12h3m-4-4 4 4-4 4M3 18h3c2 0 4-3 6-6s4-6 6-6h3m-4-4 4 4-4 4"/></svg>Shuffle & start fresh</button>
+        </form>
+        <div class="saved-review"><button id="review-saved" type="button">Review saved words <span id="saved-count">0</span></button><p>Wrong answers and flagged words are saved in a cookie for one year on this browser.</p><button id="clear-saved" type="button" class="text-button" disabled>Clear saved review list</button></div><p id="storage-status" class="error" role="status" hidden></p><p class="settings-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg>No accounts. No streaks.<br>Just you and the words.</p>
+      </aside>
+      <section class="practice" aria-label="Flashcard practice">
+        <div class="practice-top"><div class="section-heading"><span class="step">02</span><h2>A word at a time</h2></div><span class="random-label"><span></span>RANDOM ORDER</span></div>
+        <div class="mode-switch" role="group" aria-label="Study mode"><button id="practice-mode" aria-pressed="true">Flashcards</button><button id="quiz-mode" aria-pressed="false">20-question quiz</button><button id="verbs-mode" aria-pressed="false">Present tense</button></div>
+        <p id="mode-help" class="mode-help">Flip a card, then mark any words you want to revisit.</p>
+        <p id="empty-pool" class="empty-pool" role="status" hidden>No verbs in this word pool. Select a larger pool or a range containing verbs, then shuffle again.</p><div id="study-content">
+        <div class="card-wrap">
+          <button id="flashcard" class="flashcard" aria-label="Reveal English meaning" aria-describedby="card-instruction">
+            <span class="card-top"><span id="card-language">ITALIAN</span><span class="rank" id="rank">#1 IN FREQUENCY</span></span>
+            <span class="card-body"><span class="decorative-star" aria-hidden="true">✳</span><span id="verb-person" class="verb-person" lang="it" hidden></span><span id="card-word" lang="it"></span><span id="card-answer" class="card-answer" hidden></span><span id="card-state" class="card-state">What does this word mean?</span></span>
+            <span class="card-bottom"><span id="card-instruction">Click to reveal</span><span class="flip-icon" aria-hidden="true">↻</span></span>
+          </button>
+          <button id="speak" class="sound-button" aria-label="Listen to the Italian pronunciation" title="Listen to pronunciation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 5-6 4H2v6h3l6 4V5Zm4 3c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/></svg></button>
+        </div>
+        <div id="quiz-options" class="quiz-options" aria-label="Choose the meaning" hidden></div>
+        <p id="quiz-feedback" class="quiz-feedback" role="status" aria-live="polite" hidden></p>
+        <div class="review-actions"><button id="mark-wrong" aria-pressed="false">Mark incorrect</button><button id="mark-review" aria-pressed="false">☆ Review later</button><button id="mark-learned" hidden>✓ Learned — remove</button></div>
+        <div class="card-controls"><button id="previous" class="previous-button" aria-label="Previous card" disabled>←</button><button id="reveal" class="reveal-button">Reveal meaning <span>↻</span></button><button id="next" class="next-button">Next word <span>→</span></button></div>
+        <div class="session-status" role="status" aria-live="polite"><span id="session-counter"></span><span id="pool-description"></span></div>
+        <div class="progress-track" aria-hidden="true"><div id="progress"></div></div>
+        <section id="conjugation-panel" class="conjugation-panel" aria-label="Present tense conjugation" hidden><div class="conjugation-heading"><h3>Presente indicativo</h3><a id="conjugation-source" target="_blank" rel="noreferrer">Verb reference ↗</a></div><table><caption class="sr-only">Present indicative forms</caption><tbody id="conjugation-rows"></tbody></table><p id="conjugation-note" hidden></p><p class="conjugation-credit">Conjugations: Wiktionary / Ian Hamlin · <a href="./conjugations-LICENSE.md" target="_blank" rel="noreferrer">CC BY-SA 3.0</a></p></section>
+        </div><section id="quiz-results" class="quiz-results" aria-label="Quiz results" hidden><span class="eyebrow">UN PASSO AVANTI</span><h2>Quiz complete.</h2><p id="quiz-score"></p><p id="quiz-summary"></p><div class="result-actions"><button id="review-quiz-wrong">Review wrong answers</button><button id="review-quiz-flagged">Review flagged words</button><button id="retry-quiz">Start another quiz</button></div><p>Your wrong answers and flags are saved for later, too.</p></section><p id="keyboard-help" class="keyboard-hint"><kbd>space</kbd> flip card <span>·</span> <kbd>←</kbd> <kbd>→</kbd> move between words</p>
+      </section>
+    </div>
+    <div class="closing-note"><span aria-hidden="true">✳</span><p>Small words open big doors. <em>Un passo alla volta.</em></p></div>
+  </main>
+  <footer><span>Made for the joy of learning.</span><span>Frequency data from <a href="https://atlasruna.com/blog/italian-word-frequency-list/" target="_blank" rel="noreferrer">Atlas Runa ↗</a></span><span>500 words. Endless beginnings.</span></footer>
+  <dialog id="about"><button id="about-close" class="dialog-close" aria-label="Close word list information">×</button><div class="eyebrow">THE WORDS BEHIND THE CARDS</div><h2>Common words.<br>Real-world Italian.</h2><p>These 500 entries follow the news-frequency ranking published in <a href="https://atlasruna.com/blog/italian-word-frequency-list/" target="_blank" rel="noreferrer">Atlas Runa’s Italian word frequency list</a>. Rankings and English meanings were retrieved on 18 November 2026.</p><p>The source groups related forms under a word: for example, forms of <em>essere</em> are studied together. The cards show the source’s headwords and short meanings; context can change their meaning.</p><p>Choose a top-N pool or any rank range within 1–500. Every word has an equal chance in a shuffled deck. Each appears once before the next shuffle.</p><p>Verb flashcards include present indicative conjugations, adapted from <a href="https://github.com/ian-hamlin/verb-data" target="_blank" rel="noreferrer">Ian Hamlin’s Wiktionary dataset</a> under <a href="./conjugations-LICENSE.md" target="_blank" rel="noreferrer">CC BY-SA 3.0</a>. The Present tense mode practices each available person separately. Saved marks apply to the whole verb, including its forms.</p><p>Your wrong answers and words flagged for review are stored in a small first-party cookie for one year on this browser. You can remove individual words or clear the saved list. Quiz scores and current sessions reset on refresh. There are no analytics, app accounts, or backend database. A quiz draws up to 20 distinct words from your selected pool; pools smaller than 20 use every word once. Answer choices may include words from the full collection.</p></dialog>
+</body>
+</html>
